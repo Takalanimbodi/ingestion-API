@@ -1,0 +1,9 @@
+# API framework
+fastapi
+uvicorn
+pandas
+sqlalchemy
+psycopg2-binary
+
+# HTTP requests (optional for pulling data from APIs)
+requests==2.32.0
