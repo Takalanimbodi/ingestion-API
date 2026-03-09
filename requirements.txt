@@ -4,6 +4,6 @@ uvicorn
 pandas
 sqlalchemy
 psycopg2-binary
-
+python-multipart
 # HTTP requests (optional for pulling data from APIs)
 requests==2.32.0
