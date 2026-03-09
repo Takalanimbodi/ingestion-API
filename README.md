@@ -7,4 +7,4 @@ This project provides a **Python API** to inset data from CSV or json, storing r
 - click Try it out option, it will display a choose File inside request body.
 - then click the button and choose csv then click execute button.
 - when ingestion is done it will display a message success and number of rows inserted on Successful Responses under Responses
-
+INGESTION_API=.  https://ingestion-api-5.onrender.com
