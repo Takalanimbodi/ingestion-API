@@ -11,22 +11,25 @@ router = APIRouter()
 
 def run_pipeline():
     """Run validation then clustering in correct order"""
+    # Step 1 — Validate
     with engine.connect() as conn:
-        # Step 1 — Validate first
         conn.execute(text("SELECT run_scheduled_validation()"))
         conn.commit()
 
-        # Step 2 — Check clean views have data
-        result_a = conn.execute(text("SELECT COUNT(*) FROM clean_customer_model_a")).scalar()
-        result_b = conn.execute(text("SELECT COUNT(*) FROM clean_customer_model_b")).scalar()
+    # Step 2 — Check clean views
+    with engine.connect() as conn:
+        result_a = conn.execute(
+            text("SELECT COUNT(*) FROM clean_customer_model_a")
+        ).scalar()
+        result_b = conn.execute(
+            text("SELECT COUNT(*) FROM clean_customer_model_b")
+        ).scalar()
 
-    # Step 3 — Only cluster if clean data exists
+    # Step 3 — Trigger clustering only if clean data exists
     if result_a > 0 or result_b > 0:
         clustering_url = "https://customer-clustering-api-4.onrender.com/run_clustering"
-        headers = {"X-API-SECRET": os.getenv("API_SECRET")}
+        headers = {"x-api-secret": os.getenv("API_SECRET")}
         requests.post(clustering_url, headers=headers, timeout=60)
-
-    return result_a, result_b
 
 @router.post("/csv")
 async def ingest_csv(file: UploadFile = File(...)):
